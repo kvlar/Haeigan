@@ -10,6 +10,12 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HMatrix.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="HMatrix.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2ED8A5E7-DD89-4DEE-ABF0-7D1886F1B27C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -73,8 +79,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
