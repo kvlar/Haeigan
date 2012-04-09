@@ -77,7 +77,7 @@ void SystemClass::Run()
 	while(!done)
 	{
 		// handle windows msg
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)
+		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -185,8 +185,8 @@ void SystemClass::InitializeWindows(int& width, int& height)
 		// If full screen set the screen to maximum size of the users desktop and 32bit.
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 		dmScreenSettings.dmSize       = sizeof(dmScreenSettings);
-		dmScreenSettings.dmPelsWidth  = (unsigned long)screenWidth;
-		dmScreenSettings.dmPelsHeight = (unsigned long)screenHeight;
+		dmScreenSettings.dmPelsWidth  = (unsigned long)width;
+		dmScreenSettings.dmPelsHeight = (unsigned long)height;
 		dmScreenSettings.dmBitsPerPel = 32;			
 		dmScreenSettings.dmFields     = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
@@ -203,8 +203,8 @@ void SystemClass::InitializeWindows(int& width, int& height)
 		height = 600;
 
 		// Place the window in the middle of the screen.
-		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth)  / 2;
-		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
+		posX = (GetSystemMetrics(SM_CXSCREEN) - width)  / 2;
+		posY = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
 	}
 	// Create the window with the screen settings and get the handle to it.
 	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName, 
