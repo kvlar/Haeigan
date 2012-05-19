@@ -2,7 +2,7 @@
 //----------
 // INCLUDES
 //----------
-#include <Windows.h>
+#include "D3dclass.h"
 
 //----------
 // CONSTANTS
@@ -26,5 +26,5 @@ public:
 
 private:
 	bool Render();
-
+	D3DClass* m_D3D;
 };
