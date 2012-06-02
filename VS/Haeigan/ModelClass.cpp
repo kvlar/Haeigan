@@ -53,8 +53,8 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	HRESULT result;
 	// end of boring
 
-	m_vertex_count = 3;
-	m_index_count = 3;
+	m_vertex_count = 4;
+	m_index_count = 6;
 
 	vertices = new VertexType[m_vertex_count];
 	if(!vertices){ return false; }
@@ -66,15 +66,21 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	vertices[0].positon = D3DXVECTOR3(-1.0f, -1.0f, 0.0f); //bottom left
 	vertices[0].color = D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
 
-	vertices[1].positon = D3DXVECTOR3(0.0f, 1.0f, 0.0f); //top middle
+	vertices[1].positon = D3DXVECTOR3(-1.0f, 1.0f, 0.0f); //top left
 	vertices[1].color = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
 
-	vertices[2].positon = D3DXVECTOR3(0.0f, 0.0f, 1.0f); //bottom right
+	vertices[2].positon = D3DXVECTOR3(1.0f, 1.0f, 0.0f); //top right
 	vertices[2].color = D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f);
+
+	vertices[3].positon = D3DXVECTOR3(1.0f, -1.0f, 0.0f); //bottom right
+	vertices[3].color = D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f);
 
 	indices[0] = 0;
 	indices[1] = 1;
 	indices[2] = 2;
+	indices[3] = 2;
+	indices[4] = 3;
+	indices[5] = 0;
 
 	// now we set the descriptions of the buffer and then create them
 	vertex_buffer_desc.Usage = D3D11_USAGE_DEFAULT;

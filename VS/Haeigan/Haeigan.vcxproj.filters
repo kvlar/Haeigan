@@ -17,6 +17,10 @@
       <UniqueIdentifier>{2b6174f4-2d40-4a79-8e58-d4d04ad6b298}</UniqueIdentifier>
       <Extensions>vs;ps</Extensions>
     </Filter>
+    <Filter Include="Logs">
+      <UniqueIdentifier>{df023a75-db80-40ad-8a34-81803c046752}</UniqueIdentifier>
+      <Extensions>txt;log</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SystemClass.h">
@@ -38,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -64,6 +71,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

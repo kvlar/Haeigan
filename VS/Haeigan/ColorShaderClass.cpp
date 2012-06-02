@@ -21,7 +21,7 @@ bool ColorShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 	bool result;
 
 	// Initialize the vertex and pixel shaders.
-	result = InitializeShader(device, hwnd, L"../Haigan/color.vs", L"../Haigan/color.ps");
+	result = InitializeShader(device, hwnd, L"../Haeigan/Color.vs", L"../Haeigan/Color.ps");
 	if(!result)
 	{
 		m_logger->Error("Shader initialization failed");
