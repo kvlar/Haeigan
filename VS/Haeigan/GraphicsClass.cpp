@@ -1,4 +1,5 @@
 #include "GraphicsClass.h"
+#include <cstdio>
 
 GraphicsClass::GraphicsClass()
 {
@@ -64,7 +65,8 @@ bool GraphicsClass::Frame()
 bool GraphicsClass::Render()
 {
 	// Clear buffers
-	m_D3D->BeginScene(0.5f, 0.5f, 0.5f, 1.0f);
+	// Cornflower blue #6495ED :)
+	m_D3D->BeginScene(100.0f/255.0f, 149.0f/255.0f, 237.0f/255.0f, 1.0f);
 
 	m_D3D->EndScene();
 	return true;
