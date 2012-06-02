@@ -1,5 +1,6 @@
 #include "SystemClass.h"
-
+#include "Logger.h"
+static Logger* m_logger = Logger::Get_instance();
 SystemClass::SystemClass()
 {
 	m_Input = 0;

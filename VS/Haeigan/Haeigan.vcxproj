@@ -11,17 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ColorShaderClass.h" />
     <ClInclude Include="d3dclass.h" />
     <ClInclude Include="GraphicsClass.h" />
     <ClInclude Include="InputClass.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="ModelClass.h" />
     <ClInclude Include="SystemClass.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ColorShaderClass.cpp" />
     <ClCompile Include="D3dclass.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="InputClass.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ModelClass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Color.ps">
+      <FileType>CppCode</FileType>
+    </None>
+    <None Include="Color.vs">
+      <FileType>CppCode</FileType>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2ED8A5E7-DD89-4DEE-ABF0-7D1886F1B27C}</ProjectGuid>

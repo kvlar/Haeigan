@@ -1,5 +1,6 @@
 #include "GraphicsClass.h"
-#include <cstdio>
+#include "Logger.h"
+static Logger* m_logger = Logger::Get_instance();
 
 GraphicsClass::GraphicsClass()
 {
@@ -33,6 +34,11 @@ bool GraphicsClass::Initialize(int& screen_width, int& screen_height, HWND hwnd)
 		MessageBox(hwnd, L"Couldn't initialize D3D", L"Error", MB_OK);
 		return false;
 	}
+	char name[128];
+	int memsize;
+	m_D3D->GetVideoCardInfo(name, memsize);
+
+	m_logger->Debug(name);
 	return true;
 }
 

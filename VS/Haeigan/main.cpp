@@ -1,12 +1,14 @@
 #include "systemclass.h"
-
+#include "Logger.h"
+static Logger* m_logger = Logger::Get_instance();
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
 	SystemClass* System;
 	bool result;
 	
-	
+	m_logger = Logger::Get_instance();
+	m_logger->Debug("Application start");
 	// Create the system object.
 	System = new SystemClass;
 	if(!System)
@@ -22,9 +24,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 	}
 
 	// Shutdown and release the system object.
+	m_logger->Debug("Aplication stop");
 	System->Shutdown();
 	delete System;
 	System = 0;
+
+	delete m_logger;
+	m_logger = 0;
 
 	return 0;
 }
