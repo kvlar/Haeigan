@@ -7,7 +7,7 @@ GraphicsClass::GraphicsClass()
 	m_D3D = 0;
 	m_Camera = 0;
 	m_Model = 0;
-	m_ColorShader = 0;
+	m_textureShader = 0;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& ref)
@@ -56,7 +56,7 @@ bool GraphicsClass::Initialize(int& screen_width, int& screen_height, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_D3D->GetDevice());
+	result = m_Model->Initialize(m_D3D->GetDevice(), L"../Haeigan/data/gimple_grass.dds");
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -64,14 +64,14 @@ bool GraphicsClass::Initialize(int& screen_width, int& screen_height, HWND hwnd)
 	}
 
 	// Create the color shader object.
-	m_ColorShader = new ColorShaderClass;
-	if(!m_ColorShader)
+	m_textureShader = new TextureShaderClass;
+	if(!m_textureShader)
 	{
 		return false;
 	}
 
 	// Initialize the color shader object.
-	result = m_ColorShader->Initialize(m_D3D->GetDevice(), hwnd);
+	result = m_textureShader->Initialize(m_D3D->GetDevice(), hwnd);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
@@ -89,11 +89,11 @@ bool GraphicsClass::Initialize(int& screen_width, int& screen_height, HWND hwnd)
 void GraphicsClass::Shutdown()
 {
 	// Release the color shader object.
-	if(m_ColorShader)
+	if(m_textureShader)
 	{
-		m_ColorShader->Shutdown();
-		delete m_ColorShader;
-		m_ColorShader = 0;
+		m_textureShader->Shutdown();
+		delete m_textureShader;
+		m_textureShader = 0;
 	}
 
 	// Release the model object.
@@ -151,8 +151,8 @@ bool GraphicsClass::Render()
 
 	m_Model->Render(m_D3D->GetDeviceContext());
 
-	result = m_ColorShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), \
-			worldMatrix, viewMatrix, projectionMatrix);
+	result = m_textureShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), \
+		worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture());
 
 	if(!result)
 	{

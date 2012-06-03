@@ -1,10 +1,13 @@
 #include "ModelClass.h"
 
+#include "Logger.h"
+static Logger* m_logger = Logger::Get_instance();
 
 ModelClass::ModelClass(void)
 {
 	m_vertex_buffer = 0;
 	m_index_buffer = 0;
+	m_texture = 0;
 }
 
 
@@ -14,13 +17,22 @@ ModelClass::~ModelClass(void)
 
 ModelClass::ModelClass(const ModelClass& ref){}
 
-bool ModelClass::Initialize(ID3D11Device* device)
+bool ModelClass::Initialize(ID3D11Device* device, WCHAR* texture_filename)
 {
 	bool result;
 
 	result = InitializeBuffers(device);
 	if(!result)
 	{
+		m_logger->Error("Initialize buffers failed");
+		return false;
+	}
+
+	//initialize texture
+	result = LoadTexture(device, texture_filename);
+	if(!result)
+	{
+		m_logger->Error("Load texture failed");
 		return false;
 	}
 	return true;
@@ -28,6 +40,7 @@ bool ModelClass::Initialize(ID3D11Device* device)
 
 void ModelClass::Shutdown()
 {
+	ReleaseTexture();
 	ShutdownBuffers();
 	return;
 }
@@ -64,16 +77,16 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 	// init vertices clockwise
 	vertices[0].positon = D3DXVECTOR3(-1.0f, -1.0f, 0.0f); //bottom left
-	vertices[0].color = D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
+	vertices[0].texture = D3DXVECTOR2(0.0f, 1.0f);
 
 	vertices[1].positon = D3DXVECTOR3(-1.0f, 1.0f, 0.0f); //top left
-	vertices[1].color = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[1].texture = D3DXVECTOR2(0.0f, 0.0f);
 
 	vertices[2].positon = D3DXVECTOR3(1.0f, 1.0f, 0.0f); //top right
-	vertices[2].color = D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f);
+	vertices[2].texture = D3DXVECTOR2(1.0f, 0.0f);
 
 	vertices[3].positon = D3DXVECTOR3(1.0f, -1.0f, 0.0f); //bottom right
-	vertices[3].color = D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f);
+	vertices[3].texture = D3DXVECTOR2(1.0f, 1.0f);
 
 	indices[0] = 0;
 	indices[1] = 1;
@@ -159,5 +172,42 @@ void ModelClass::RenderBuffers(ID3D11DeviceContext* device_context)
 	// set the type of primitive we'll be rendering
 	device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	return;
+}
+
+ID3D11ShaderResourceView* ModelClass::GetTexture()
+{
+	return m_texture->GetTexture();
+}
+
+bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
+{
+	bool result;
+
+	m_texture = new TextureClass;
+	if(!m_texture)
+	{
+		m_logger->Error("TextureClass creation failed");
+		return false;
+	}
+
+	// initialize texture object
+	result = m_texture->Initialize(device, filename);
+	if(!result)
+	{
+		m_logger->Error("texture initialization failed");
+		return false;
+	}
+	return true;
+}
+
+void ModelClass::ReleaseTexture()
+{
+	if(m_texture)
+	{
+		m_texture->Shutdown();
+		delete m_texture;
+		m_texture = 0;
+	}
 	return;
 }
