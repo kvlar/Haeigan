@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseShaderClass.h" />
     <ClInclude Include="CameraClass.h" />
     <ClInclude Include="ColorShaderClass.h" />
     <ClInclude Include="d3dclass.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="TextureShaderClass.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseShaderClass.cpp" />
     <ClCompile Include="CameraClass.cpp" />
     <ClCompile Include="ColorShaderClass.cpp" />
     <ClCompile Include="D3dclass.cpp" />
@@ -45,8 +47,8 @@
     <None Include="shader-error.txt" />
     <None Include="stderr.txt" />
     <None Include="stdout.txt" />
-    <None Include="Texture.ps" />
-    <None Include="Texture.vs" />
+    <None Include="BaseShader.ps" />
+    <None Include="BaseShader.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2ED8A5E7-DD89-4DEE-ABF0-7D1886F1B27C}</ProjectGuid>

@@ -53,6 +53,9 @@
     <ClInclude Include="TextureShaderClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BaseShaderClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SystemClass.cpp">
@@ -88,18 +91,15 @@
     <ClCompile Include="TextureShaderClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BaseShaderClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Color.vs">
       <Filter>Effects</Filter>
     </None>
     <None Include="Color.ps">
-      <Filter>Effects</Filter>
-    </None>
-    <None Include="Texture.vs">
-      <Filter>Effects</Filter>
-    </None>
-    <None Include="Texture.ps">
       <Filter>Effects</Filter>
     </None>
     <None Include="shader-error.txt">
@@ -110,6 +110,12 @@
     </None>
     <None Include="stdout.txt">
       <Filter>Logs</Filter>
+    </None>
+    <None Include="BaseShader.ps">
+      <Filter>Effects</Filter>
+    </None>
+    <None Include="BaseShader.vs">
+      <Filter>Effects</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@
 #include "D3dclass.h"
 #include "CameraClass.h"
 #include "ModelClass.h"
-#include "TextureShaderClass.h"
+#include "BaseShaderClass.h"
 
 //----------
 // CONSTANTS
@@ -32,5 +32,5 @@ private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
-	TextureShaderClass* m_textureShader;
+	BaseShaderClass* m_baseShader;
 };

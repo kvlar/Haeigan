@@ -26,6 +26,14 @@ private:
 		D3DMATRIX view;
 		D3DMATRIX projection;
 	};
+
+	struct LightBufferType
+	{
+		D3DXVECTOR4 diffuseColor;
+		D3DXVECTOR3 lightDirection;
+		float padding;
+	};
+
 public:
 	BaseShaderClass(void);
 	BaseShaderClass(const BaseShaderClass&);
