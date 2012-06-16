@@ -1,8 +1,5 @@
 #include "BaseShaderClass.h"
 
-#include "Logger.h"
-static Logger* m_logger = Logger::Get_instance();
-
 BaseShaderClass::BaseShaderClass(void)
 {
 	m_vertex_shader = 0;
@@ -27,7 +24,7 @@ bool BaseShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 	result = InitializeShader(device, hwnd, L"../Haeigan/BaseShader.vs", L"../Haeigan/BaseShader.ps");
 	if(!result)
 	{
-		m_logger->Error("Shader initialization failed");
+
 		return false;
 	}
 
@@ -52,7 +49,6 @@ bool BaseShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount,
 	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, diffuseColor);
 	if(!result)
 	{
-		m_logger->Error("SetShaderParameters failed");
 		return false;
 	}
 
@@ -224,7 +220,6 @@ bool BaseShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* v
 	result = device->CreateSamplerState(&samplerDesc, &m_sampleState);
 	if(FAILED(result))
 	{
-		m_logger->Error("CreateSamplerState failed");
 		return false;
 	}
 

@@ -1,8 +1,6 @@
 #pragma once
 #include "D3dclass.h"
 
-#include "Logger.h"
-static Logger* m_logger = Logger::Get_instance();
 
 D3DClass::D3DClass()
 {
@@ -53,15 +51,12 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 	result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
 	if(FAILED(result))
 	{
-		m_logger->Error("CreateDXGIFactory failed");
 		return false;
 	}
 
 	// use factory to create an adapter for graphics iface (video card)
 	result = factory->EnumAdapters(0, &adapter);
-	if(FAILED(result))
-	{
-		m_logger->Error("adapter for graphics interface creation failed");
+	if(FAILED(result)){
 		return false;
 	}
 	
@@ -69,7 +64,7 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 	result = adapter->EnumOutputs(0, &adapter_output);
 	if(FAILED(result))
 	{
-		m_logger->Error("adapter for graphics interface creation failed");
+
 		return false;
 	}
 
@@ -79,7 +74,7 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 		DXGI_ENUM_MODES_INTERLACED, &num_modes, NULL);
 	if(FAILED(result))
 	{
-		m_logger->Error("display mode list failed");
+
 		return false;
 	}
 
@@ -96,7 +91,7 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 		DXGI_ENUM_MODES_INTERLACED, &num_modes,display_mode_list);
 	if(FAILED(result))
 	{
-		m_logger->Error("GetDisplayModeList failed");
+
 		return false;
 	}
 
@@ -198,7 +193,6 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 	if(FAILED(result))
 	{
 		//TODO: Add D3D_DRIVER_TYPE_REFERENCE  fallback
-		m_logger->Error("CreateDeviceAndSwapChain failed");
 		return false;
 	}
 
@@ -206,14 +200,12 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 	result = m_swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&back_buffer_ptr);
 	if(FAILED(result))
 	{
-		m_logger->Error("GetBuffer failed");
 		return false;
 	}
 	// create render target view
 	result = m_device->CreateRenderTargetView(back_buffer_ptr, NULL, &m_render_target_view);
 	if(FAILED(result))
 	{
-		m_logger->Error("CreateRenderTargetView failed");
 		return false;
 	}
 
@@ -239,7 +231,6 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 	result = m_device->CreateTexture2D(&depth_buffer_desc, NULL, &m_depth_stencil_buffer);
 	if(FAILED(result))
 	{
-		m_logger->Error("Create depth buffer failed");
 		return false;
 	}
 
@@ -270,7 +261,7 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 	result = m_device->CreateDepthStencilState(&depth_stencil_desc, &m_depth_stencil_state);
 	if(FAILED(result))
 	{
-		m_logger->Error("CreateDepthStencilState failed");
+		
 		return false;
 	}
 
@@ -286,7 +277,7 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 	result = m_device->CreateDepthStencilView(m_depth_stencil_buffer,&depth_stencil_view_desc, &m_depth_stencil_view);
 	if(FAILED(result))
 	{
-		m_logger->Error("CreateDepthStencilStateView failed");
+		
 		return false;
 	}
 
@@ -309,7 +300,7 @@ bool D3DClass::Initialize(int screen_width, int screen_height, bool vsync, HWND 
 	result = m_device->CreateRasterizerState(&raster_desc, &m_raster_state);
 	if(FAILED(result))
 	{
-		m_logger->Error("CreateRasterizerState failed");
+		
 		return false;
 	}
 

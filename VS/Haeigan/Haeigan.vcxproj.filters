@@ -79,16 +79,10 @@
     <ClCompile Include="ModelClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ColorShaderClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CameraClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextureClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureShaderClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BaseShaderClass.cpp">

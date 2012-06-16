@@ -1,7 +1,5 @@
 #include "ModelClass.h"
 
-#include "Logger.h"
-static Logger* m_logger = Logger::Get_instance();
 
 ModelClass::ModelClass(void)
 {
@@ -24,7 +22,6 @@ bool ModelClass::Initialize(ID3D11Device* device, WCHAR* texture_filename)
 	result = InitializeBuffers(device);
 	if(!result)
 	{
-		m_logger->Error("Initialize buffers failed");
 		return false;
 	}
 
@@ -32,7 +29,6 @@ bool ModelClass::Initialize(ID3D11Device* device, WCHAR* texture_filename)
 	result = LoadTexture(device, texture_filename);
 	if(!result)
 	{
-		m_logger->Error("Load texture failed");
 		return false;
 	}
 	return true;
@@ -191,7 +187,6 @@ bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
 	m_texture = new TextureClass;
 	if(!m_texture)
 	{
-		m_logger->Error("TextureClass creation failed");
 		return false;
 	}
 
@@ -199,7 +194,6 @@ bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
 	result = m_texture->Initialize(device, filename);
 	if(!result)
 	{
-		m_logger->Error("texture initialization failed");
 		return false;
 	}
 	return true;

@@ -1,7 +1,5 @@
 #include "TextureClass.h"
 
-#include "Logger.h"
-static Logger* m_logger = Logger::Get_instance();
 
 bool TextureClass::Initialize(ID3D11Device* device, WCHAR* filename)
 {
@@ -12,7 +10,6 @@ bool TextureClass::Initialize(ID3D11Device* device, WCHAR* filename)
 		&m_texture, NULL);
 	if(FAILED(result))
 	{
-		m_logger->Error("Load texture failed");
 		return false;
 	}
 	return true;

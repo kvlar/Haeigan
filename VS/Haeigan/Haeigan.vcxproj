@@ -27,7 +27,6 @@
   <ItemGroup>
     <ClCompile Include="BaseShaderClass.cpp" />
     <ClCompile Include="CameraClass.cpp" />
-    <ClCompile Include="ColorShaderClass.cpp" />
     <ClCompile Include="D3dclass.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="InputClass.cpp" />
@@ -37,7 +36,6 @@
     <ClCompile Include="ModelClass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
     <ClCompile Include="TextureClass.cpp" />
-    <ClCompile Include="TextureShaderClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Color.ps">
@@ -96,6 +94,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -112,6 +111,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -1,6 +1,5 @@
 #include "SystemClass.h"
-#include "Logger.h"
-static Logger* m_logger = Logger::Get_instance();
+
 SystemClass::SystemClass()
 {
 	m_Input = 0;
@@ -69,6 +68,7 @@ void SystemClass::Run()
 {
 	MSG msg;
 	bool done, result;
+	bool got_msg;
 
 	// initialize msg
 	ZeroMemory(&msg, sizeof(MSG));
@@ -78,7 +78,8 @@ void SystemClass::Run()
 	while(!done)
 	{
 		// handle windows msg
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		got_msg = PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
+		if(got_msg)
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -87,15 +88,16 @@ void SystemClass::Run()
 			{
 				done = true;
 			}
-			else
-			{
-				result = Frame();
-				if(!result)
-				{
-					done = true;
-				}
-			}
+			
 
+		}
+		else
+		{
+			result = Frame();
+			if(!result)
+			{
+				done = true;
+			}
 		}
 	}
 	return;

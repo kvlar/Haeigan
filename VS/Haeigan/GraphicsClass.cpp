@@ -1,6 +1,5 @@
 #include "GraphicsClass.h"
-#include "Logger.h"
-static Logger* m_logger = Logger::Get_instance();
+
 
 GraphicsClass::GraphicsClass()
 {
@@ -177,7 +176,6 @@ bool GraphicsClass::Render(float rotation)
 
 	if(!result)
 	{
-		m_logger->Error("Color shader failed! :(");
 		return false;
 	}
 	m_D3D->EndScene();
