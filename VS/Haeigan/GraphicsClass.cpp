@@ -166,12 +166,23 @@ bool GraphicsClass::Render(float rotation)
 	m_D3D->GetProjectionMatrix(projectionMatrix);
 
 	// rotate model
-	D3DXMatrixRotationY(&worldMatrix, rotation);
+	D3DXVECTOR3 rotation_vector(0.0f, 0.0f, 0.0f);
+	rotation_vector.y = rotation;
+	rotation_vector.z = -rotation;
+	D3DXVECTOR3 test_vector(0.0f, 0.0f, 0.0f);
+
+	test_vector.z = 1.0f;
+	//m_Model->Translate(test_vector);
+	m_Model->Rotate(rotation_vector);
+	//D3DXMatrixRotationY(&worldMatrix, rotation);
+
+	D3DXMATRIX world_modification = m_Model->GetWorldTransformationMatrix();
+
 
 	m_Model->Render(m_D3D->GetDeviceContext());
 
 	result = m_baseShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), \
-		worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture(), m_light->GetDirection(),
+		worldMatrix * world_modification, viewMatrix, projectionMatrix, m_Model->GetTexture(), m_light->GetDirection(),
 		m_light->GetDiffuseColor());
 
 	if(!result)

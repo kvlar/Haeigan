@@ -6,6 +6,10 @@ ModelClass::ModelClass(void)
 	m_vertex_buffer = 0;
 	m_index_buffer = 0;
 	m_texture = 0;
+	m_Scale = 1.0f;
+	ZeroMemory(m_Rotation, sizeof(m_Rotation));
+	ZeroMemory(m_Position, sizeof(m_Position));
+
 }
 
 
@@ -72,6 +76,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	if(!indices){ return false; }
 
 	// init vertices clockwise
+
 	vertices[0].positon = D3DXVECTOR3(-1.0f, -1.0f, 0.0f); //bottom left
 	vertices[0].texture = D3DXVECTOR2(0.0f, 1.0f);
 	vertices[0].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
@@ -79,6 +84,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	vertices[1].positon = D3DXVECTOR3(-1.0f, 1.0f, 0.0f); //top left
 	vertices[1].texture = D3DXVECTOR2(0.0f, 0.0f);
 	vertices[1].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+
 
 	vertices[2].positon = D3DXVECTOR3(1.0f, 1.0f, 0.0f); //top right
 	vertices[2].texture = D3DXVECTOR2(1.0f, 0.0f);
@@ -208,4 +214,31 @@ void ModelClass::ReleaseTexture()
 		m_texture = 0;
 	}
 	return;
+}
+
+//-----
+// Utility functions
+//----
+
+void ModelClass::Translate(D3DXVECTOR3 move)
+{
+	m_Position += move;
+}
+void ModelClass::Rotate(D3DXVECTOR3 rotation)
+{
+	m_Rotation = rotation;
+}
+void ModelClass::Scale(float scale_factor)
+{
+	m_Scale += scale_factor;
+}
+
+D3DXMATRIX ModelClass::GetWorldTransformationMatrix()
+{
+	D3DXMATRIX translation, scale, rotate;
+	D3DXMatrixTranslation(&translation, m_Position.x, m_Position.y, m_Position.z);
+	D3DXMatrixScaling(&scale, m_Scale, m_Scale, m_Scale);
+	D3DXMatrixRotationYawPitchRoll(&rotate, m_Rotation.y, m_Rotation.x, m_Rotation.z);
+
+	return scale * rotate * translation;
 }

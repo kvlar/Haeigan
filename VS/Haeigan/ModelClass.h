@@ -22,7 +22,7 @@ private:
 		D3DXVECTOR2 texture;
 		D3DXVECTOR3 normal;
 	};
-
+	
 public:
 	ModelClass(void);
 	ModelClass(const ModelClass&);
@@ -34,6 +34,10 @@ public:
 
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
+	void Translate(D3DXVECTOR3);
+	void Rotate(D3DXVECTOR3);
+	void Scale(float);
+	D3DXMATRIX GetWorldTransformationMatrix();
 
 private:
 	bool InitializeBuffers(ID3D11Device*);
@@ -47,8 +51,10 @@ private:
 	ID3D11Buffer* m_vertex_buffer;
 	ID3D11Buffer* m_index_buffer;
 	int m_vertex_count, m_index_count;
-
+	
 	TextureClass* m_texture;
-
+	D3DXVECTOR3 m_Position;
+	D3DXVECTOR3 m_Rotation;
+	float m_Scale;
 };
 
