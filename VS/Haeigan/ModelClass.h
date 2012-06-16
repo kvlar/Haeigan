@@ -20,6 +20,7 @@ private:
 	{
 		D3DXVECTOR3 positon;
 		D3DXVECTOR2 texture;
+		D3DXVECTOR3 normal;
 	};
 
 public:

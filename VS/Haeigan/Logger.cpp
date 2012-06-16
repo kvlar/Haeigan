@@ -3,16 +3,16 @@
 
 Logger::Logger(void)
 {
-	out_log.open(OUT_LOG_NAME, std::ios::trunc);
-	err_log.open(ERR_LOG_NAME, std::ios::trunc);
+	//out_log.open(OUT_LOG_NAME, std::ios::trunc);
+	//err_log.open(ERR_LOG_NAME, std::ios::trunc);
 	
 }
 
 
 Logger::~Logger(void)
 {
-	out_log.close();
-	err_log.close();
+	//out_log.close();
+	//err_log.close();
 }
 
 Logger* Logger::Get_instance()
@@ -32,6 +32,7 @@ std::string Logger::timetag()
 
 void Logger::log(int level, std::string msg)
 {
+	
 	std::string tag = "[DEBUG] ";
 	std::string time_tag = timetag();
 

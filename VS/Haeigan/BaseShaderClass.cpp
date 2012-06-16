@@ -10,6 +10,8 @@ BaseShaderClass::BaseShaderClass(void)
 	m_layout = 0;
 	m_matrix_buffer = 0;
 	m_sampleState = 0;
+	m_shaderBuffer = 0;
+
 }
 
 
@@ -41,13 +43,13 @@ void BaseShaderClass::Shutdown()
 }
 
 bool BaseShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, 
-	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture)
+	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor)
 {
 	bool result;
 
 
 	// Set the shader parameters that it will use for rendering.
-	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, diffuseColor);
 	if(!result)
 	{
 		m_logger->Error("SetShaderParameters failed");
@@ -66,10 +68,10 @@ bool BaseShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* v
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* vertexShaderBuffer;
 	ID3D10Blob* pixelShaderBuffer;
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
+	D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 	unsigned int numElements;
 	D3D11_BUFFER_DESC matrixBufferDesc;
-
+	D3D11_BUFFER_DESC shaderBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
 
 	// Initialize the pointers this function will use to null.
@@ -147,6 +149,13 @@ bool BaseShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* v
 	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[1].InstanceDataStepRate = 0;
 
+	polygonLayout[2].SemanticName = "NORMAL";
+	polygonLayout[2].SemanticIndex = 0;
+	polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	polygonLayout[2].InputSlot = 0;
+	polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	polygonLayout[2].InstanceDataStepRate = 0;
 
 	// Get a count of the elements in the layout.
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
@@ -177,6 +186,20 @@ bool BaseShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* v
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	result = device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrix_buffer);
+	if(FAILED(result))
+	{
+		return false;
+	}
+
+	// shader buffer desc
+	shaderBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	shaderBufferDesc.ByteWidth = sizeof(ShaderBufferType);
+	shaderBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	shaderBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	shaderBufferDesc.MiscFlags = 0;
+	shaderBufferDesc.StructureByteStride = 0;
+
+	result = device->CreateBuffer(&shaderBufferDesc, NULL, &m_shaderBuffer);
 	if(FAILED(result))
 	{
 		return false;
@@ -224,6 +247,13 @@ void BaseShaderClass::ShutdownShader()
 		m_matrix_buffer->Release();
 		m_matrix_buffer = 0;
 	}
+
+	if(m_shaderBuffer)
+	{
+		m_shaderBuffer->Release();
+		m_shaderBuffer = 0;
+	}
+
 
 	// Release the layout.
 	if(m_layout)
@@ -286,11 +316,13 @@ void BaseShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hw
 
 
 bool BaseShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, 
-					   D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture)
+					   D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, D3DXVECTOR3 lightDirection, 
+					   D3DXVECTOR4 diffuseColor)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
+	ShaderBufferType* shaderDataPtr;
 	unsigned int bufferNumber;
 
 	// Transpose the matrices to prepare them for the shader.
@@ -324,6 +356,33 @@ bool BaseShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3
 
 	// texture for Pixel Shader
 	deviceContext->PSSetShaderResources(0, 1, &texture);
+	
+	result = deviceContext->Map(m_shaderBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if(FAILED(result))
+	{
+		return false;
+	}
+
+	// Get a pointer to the data in the constant buffer.
+	shaderDataPtr = (ShaderBufferType*)mappedResource.pData;
+
+	// Copy data into buffer
+	shaderDataPtr->diffuseColor = diffuseColor;
+	shaderDataPtr->lightDirection = lightDirection;
+	shaderDataPtr->padding = 0.0f;
+
+	// Unlock the constant buffer.
+	deviceContext->Unmap(m_shaderBuffer, 0);
+
+	// Set the position of the constant buffer in the vertex shader.
+	bufferNumber = 0;
+
+	// Finanly set the constant buffer in the vertex shader with the updated values.
+	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_shaderBuffer);
+	
+
+
+	
 	return true;
 }
 
