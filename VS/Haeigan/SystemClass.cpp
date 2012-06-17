@@ -110,6 +110,9 @@ bool SystemClass::Frame()
 		return false;
 	}
 
+	// move this to separate class
+	
+
 	// do the graphics processing
 	result = m_Graphics->Frame();
 	return result;	

@@ -11,7 +11,7 @@
 //----------
 // CONSTANTS
 //----------
-const bool FULL_SCREEN = false;
+const bool FULL_SCREEN = true;
 const bool VSYNC_ENABLED = false;
 const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.1f;
@@ -27,6 +27,8 @@ public:
 	bool Initialize(int&, int&, HWND);
 	void Shutdown();
 	bool Frame();
+
+	CameraClass* GetCamera();
 
 private:
 	bool Render(float);

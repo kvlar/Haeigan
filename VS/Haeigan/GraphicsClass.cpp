@@ -159,6 +159,9 @@ bool GraphicsClass::Render(float rotation)
 	// Cornflower blue #6495ED :)
 	m_D3D->BeginScene(100.0f/255.0f, 149.0f/255.0f, 237.0f/255.0f, 1.0f);
 	
+	// move it from here!!
+	
+
 	// this calculates the ViewMatrix!
 	m_Camera->Render();
 
@@ -192,4 +195,9 @@ bool GraphicsClass::Render(float rotation)
 	}
 	m_D3D->EndScene();
 	return true;
+}
+
+CameraClass* GraphicsClass::GetCamera()
+{
+	return m_Camera;
 }
