@@ -71,6 +71,7 @@ bool SystemClass::Initialize()
 	}
 
 	// initialize cube
+	/*
 	D3DXVECTOR3 position(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 rotation(0.0f, 0.0f, 0.0f);
 	float scale = 1.0f;
@@ -78,7 +79,7 @@ bool SystemClass::Initialize()
 		position.y += 8.0f;
 		m_Graphics->AddCube(position, rotation, scale);
 	}
-	
+	*/
 	return true;
 }
 
