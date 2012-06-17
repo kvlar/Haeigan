@@ -278,7 +278,7 @@ void BaseShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hw
 {
 	char* compileErrors;
 	unsigned long bufferSize, i;
-	ofstream fout;
+	std::ofstream fout;
 
 
 	// Get a pointer to the error message text buffer.
@@ -289,7 +289,7 @@ void BaseShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hw
 
 	// Open a file to write the error message to.
 	fout.open("shader-error.txt");
-
+	
 	// Write out the error message.
 	for(i=0; i<bufferSize; i++)
 	{

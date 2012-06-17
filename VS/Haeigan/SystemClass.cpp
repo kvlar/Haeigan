@@ -4,12 +4,30 @@ SystemClass::SystemClass()
 {
 	m_Input = 0;
 	m_Graphics = 0;
+	m_physx = 0;
 }
 
 SystemClass::SystemClass(const SystemClass& ref){}
 
 SystemClass::~SystemClass()
 {
+}
+
+bool SystemClass::InitializePhysX()
+{
+	NxSDKCreateError error_code;
+	m_physx = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION, (NxUserAllocator*)0,
+		(NxUserOutputStream*)0, 
+		NxPhysicsSDKDesc(),&error_code);
+
+	if(!m_physx) return false;
+
+	NxSceneDesc scene_desc;
+	scene_desc.gravity.set(0,-9.81f, 0);
+	m_physx_scene = m_physx->createScene(scene_desc);
+	if(!m_physx_scene) return false;
+
+	return true;
 }
 
 bool SystemClass::Initialize()
@@ -19,6 +37,13 @@ bool SystemClass::Initialize()
 	bool result;
 
 	InitializeWindows(screen_width, screen_height);
+
+	result = InitializePhysX();
+	if(!result)
+	{
+		MessageBox(m_hwnd, L"Could not initialize the PhysX.", L"Error", MB_OK);
+		return false;
+	}
 
 	m_Input = new InputClass;
 	if(!m_Input)
@@ -39,13 +64,36 @@ bool SystemClass::Initialize()
 		return false;
 	}
 
-	result = m_Graphics->Initialize(screen_width, screen_height, m_hwnd);
+	result = m_Graphics->Initialize(screen_width, screen_height, m_hwnd, m_physx_scene);
 	if(!result)
 	{
 		return false;
 	}
 
+	// initialize cube
+	D3DXVECTOR3 position(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 rotation(0.0f, 0.0f, 0.0f);
+	float scale = 1.0f;
+	for(int i = 0; i < 8; i++){
+		position.y += 8.0f;
+		m_Graphics->AddCube(position, rotation, scale);
+	}
+	
 	return true;
+}
+
+void SystemClass::ShutdownPhysX()
+{
+	if(m_physx_scene && m_physx)
+	{
+		m_physx->releaseScene(*m_physx_scene);
+		m_physx_scene = 0;
+	}
+	if(m_physx)
+	{
+		NxReleasePhysicsSDK(m_physx);
+		m_physx = 0;
+	}
 }
 
 void SystemClass::Shutdown()
@@ -65,6 +113,8 @@ void SystemClass::Shutdown()
 		delete m_Input;
 		m_Input = 0;
 	}
+
+	ShutdownPhysX();
 
 	ShutdownWindows();
 	return;
@@ -97,6 +147,7 @@ void SystemClass::Run()
 		}
 		else
 		{
+			
 			result = Frame();
 			if(!result)
 			{
@@ -120,6 +171,22 @@ bool SystemClass::Frame()
 	D3DXVECTOR3 movement = m_Input->GetMovement();
 	float rotationY = m_Input->GetYRotation();
 	float rotationX = m_Input->GetXRotation();
+
+	// some fun :)
+	if(m_Input->IsKeyPressed(' '))
+	{
+		m_Graphics->AddCubeFromEye();
+	}
+	if(m_Input->IsKeyPressed('E'))
+	{
+		m_Graphics->AddStack(10, m_physx->getParameter(NX_SKIN_WIDTH));
+	}
+	if(m_Input->IsKeyPressed('R'))
+	{
+		m_Graphics->AddTower(10, m_physx->getParameter(NX_SKIN_WIDTH));
+	}
+
+
 	// do the graphics processing
 	result = m_Graphics->Frame(movement, rotationX,rotationY);
 	return result;	

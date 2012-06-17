@@ -15,7 +15,7 @@
 const std::string VS_VERSION = "vs_4_0";
 const std::string PS_VERSION = "ps_4_0";
 
-using namespace std;
+
 
 class BaseShaderClass
 {

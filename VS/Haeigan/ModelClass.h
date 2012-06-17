@@ -12,7 +12,6 @@
 //------
 #include "TextureClass.h"
 #include <vector>
-#include <iostream>
 #include <fstream>
 #include <string>
 

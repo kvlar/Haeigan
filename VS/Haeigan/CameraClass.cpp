@@ -13,6 +13,7 @@ CameraClass::CameraClass()
 	m_rotationX = 0.0f;
 	m_rotationY = 0.0f;
 	m_rotationZ = 0.0f;
+	ZeroMemory(m_target, sizeof(D3DXVECTOR3));
 }
 
 
@@ -108,6 +109,9 @@ void CameraClass::Render()
 	// Translate the rotated camera position to the location of the viewer.
 	lookAt = position + lookAt;
 
+	m_target.x = lookAt.x;
+	m_target.y = lookAt.y;
+	m_target.z = lookAt.z;
 	// Finally create the view matrix from the three updated vectors.
 	D3DXMatrixLookAtLH(&m_viewMatrix, &position, &lookAt, &up);
 
@@ -119,4 +123,10 @@ void CameraClass::GetViewMatrix(D3DXMATRIX& viewMatrix)
 {
 	viewMatrix = m_viewMatrix;
 	return;
+}
+
+D3DXVECTOR3 CameraClass::GetForward()
+{
+	D3DXVECTOR3 pos(m_positionX, m_positionY, m_positionZ);
+	return m_target - pos;
 }

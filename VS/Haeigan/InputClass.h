@@ -23,7 +23,7 @@
 // consts
 //--------
 
-const float SPEED_FACTOR = 0.1f;
+const float SPEED_FACTOR = 0.2f;
 
 class InputClass
 {
@@ -41,6 +41,7 @@ public:
 	float GetXRotation();
 	void GetMouseLocation(int&, int&);
 
+	bool IsKeyPressed(char);
 
 private:
 	bool ReadKeyboard();

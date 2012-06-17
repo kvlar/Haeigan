@@ -170,6 +170,26 @@ bool InputClass::IsEscapePressed()
 	return false;
 }
 
+bool InputClass::IsKeyPressed(char c)
+{
+	switch(c)
+	{
+	case 'Y':
+		return (m_keyboard_state[DIK_Y] & 0x80);
+	
+	case 'E':
+		return (m_keyboard_state[DIK_E] & 0x80);
+
+	case 'R':
+		return (m_keyboard_state[DIK_R] & 0x80);
+	case 'T': 
+		return (m_keyboard_state[DIK_T] & 0x80);
+	case ' ':
+		return (m_keyboard_state[DIK_SPACE] & 0x80);
+	}
+	return false;
+}
+
 D3DXVECTOR3 InputClass::GetMovement()
 {
 	float x = 0.0f,y = 0.0f,z = 0.0f;

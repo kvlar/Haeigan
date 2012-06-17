@@ -4,12 +4,16 @@
 // preprocessing directives
 //-------------
 
+#define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 
 //-------------
 // includes
 //-------------
+
 #include <Windows.h>
+
+#include <NxPhysics.h>
 
 #include "InputClass.h"
 #include "GraphicsClass.h"
@@ -38,6 +42,8 @@ private:
 	bool Frame();
 	void InitializeWindows(int&, int&);
 	void ShutdownWindows();
+	bool InitializePhysX();
+	void ShutdownPhysX();
 
 private:
 	LPCWSTR m_applicationName;
@@ -46,6 +52,10 @@ private:
 
 	InputClass* m_Input;
 	GraphicsClass* m_Graphics;
+
+private: // PHYSX
+	NxPhysicsSDK* m_physx;
+	NxScene* m_physx_scene;
 };
 
 //-------------
