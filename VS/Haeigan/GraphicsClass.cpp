@@ -8,6 +8,7 @@ GraphicsClass::GraphicsClass()
 	m_Model = 0;
 	m_baseShader = 0;
 	m_light = 0;
+
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& ref)
@@ -56,7 +57,7 @@ bool GraphicsClass::Initialize(int& screen_width, int& screen_height, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_D3D->GetDevice(), L"../Haeigan/data/gimple_grass.dds");
+	result = m_Model->Initialize(m_D3D->GetDevice(), "../Haeigan/data/cube.obj", L"../Haeigan/data/white_plastic.dds");
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -85,8 +86,8 @@ bool GraphicsClass::Initialize(int& screen_width, int& screen_height, HWND hwnd)
 	}
 
 	// Initialize the light object.
-	m_light->SetDiffuseColor(1.0f, 0.0f, 1.0f, 1.0f);
-	m_light->SetDirection(0.0f, 0.0f, 1.0f);
+	m_light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_light->SetDirection(-1.0f, 0.0f, 1.0f);
 
 	return true;
 }
@@ -168,7 +169,7 @@ bool GraphicsClass::Render(float rotation)
 	// rotate model
 	D3DXVECTOR3 rotation_vector(0.0f, 0.0f, 0.0f);
 	rotation_vector.y = rotation;
-	rotation_vector.z = -rotation;
+	rotation_vector.z = rotation;
 	D3DXVECTOR3 test_vector(0.0f, 0.0f, 0.0f);
 
 	test_vector.z = 1.0f;

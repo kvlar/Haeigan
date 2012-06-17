@@ -21,6 +21,10 @@
       <UniqueIdentifier>{df023a75-db80-40ad-8a34-81803c046752}</UniqueIdentifier>
       <Extensions>txt;log</Extensions>
     </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{0e751c97-0224-4323-af45-710a7b1b236f}</UniqueIdentifier>
+      <Extensions>obj;mtl</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SystemClass.h">
