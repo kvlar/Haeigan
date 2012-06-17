@@ -150,3 +150,54 @@ bool InputClass::ReadMouse()
 	}
 	return true;
 }
+
+void InputClass::ProcessInput()
+{
+	m_mouse_x += m_mouse_state.lX;
+	m_mouse_y += m_mouse_state.lY;
+	m_mouse_x = HMath::Clamp(m_mouse_x, 0, m_screen_width);
+	m_mouse_y = HMath::Clamp(m_mouse_y, 0, m_screen_height);
+
+	return;
+}
+
+bool InputClass::IsEscapePressed()
+{
+	if(m_keyboard_state[DIK_ESCAPE] & 0x80)
+	{
+		return true;
+	}
+	return false;
+}
+
+D3DXVECTOR3 InputClass::GetMovement()
+{
+	float x = 0.0f,y = 0.0f,z = 0.0f;
+	if(m_keyboard_state[DIK_W] & 0x80) z = 1.0f;
+	if(m_keyboard_state[DIK_S] & 0x80) z = -1.0f;
+	if(m_keyboard_state[DIK_A] & 0x80) x = -1.0f;
+	if(m_keyboard_state[DIK_D] & 0x80) x = 1.0f;
+	
+	
+	
+	D3DXVECTOR3 out(x,y,z);
+	return SPEED_FACTOR * out;
+}
+
+float InputClass::GetYRotation()
+{
+	if(m_mouse_state.rgbButtons[0]  & 0x80)
+	{
+		return (float)m_mouse_state.lX * SPEED_FACTOR;
+	}
+	return 0.0f;
+}
+
+float InputClass::GetXRotation()
+{
+	if(m_mouse_state.rgbButtons[0]  & 0x80)
+	{
+		return (float)m_mouse_state.lY * SPEED_FACTOR;
+	}
+	return 0.0f;
+}

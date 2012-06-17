@@ -16,6 +16,7 @@
     <ClInclude Include="ColorShaderClass.h" />
     <ClInclude Include="d3dclass.h" />
     <ClInclude Include="GraphicsClass.h" />
+    <ClInclude Include="HMath.h" />
     <ClInclude Include="InputClass.h" />
     <ClInclude Include="LightClass.h" />
     <ClInclude Include="Logger.h" />
@@ -29,6 +30,7 @@
     <ClCompile Include="CameraClass.cpp" />
     <ClCompile Include="D3dclass.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
+    <ClCompile Include="HMath.cpp" />
     <ClCompile Include="InputClass.cpp" />
     <ClCompile Include="LightClass.cpp" />
     <ClCompile Include="Logger.cpp" />

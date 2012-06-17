@@ -26,7 +26,12 @@ bool SystemClass::Initialize()
 		return false;
 	}
 
-	m_Input->Initialize();
+	result = m_Input->Initialize(m_hinstance, m_hwnd, screen_width, screen_height);
+	if(!result) 
+	{
+		MessageBox(m_hwnd, L"Could not initialize the input object.", L"Error", MB_OK);
+		return false;
+	}
 
 	m_Graphics = new GraphicsClass;
 	if(!m_Graphics)
@@ -56,6 +61,7 @@ void SystemClass::Shutdown()
 	// release input
 	if(m_Input)
 	{
+		m_Input->Shutdown();
 		delete m_Input;
 		m_Input = 0;
 	}
@@ -96,6 +102,10 @@ void SystemClass::Run()
 			{
 				done = true;
 			}
+			if(m_Input->IsEscapePressed())
+			{
+				done = true;
+			}
 		}
 	}
 	return;
@@ -104,17 +114,14 @@ void SystemClass::Run()
 bool SystemClass::Frame()
 {
 	bool result;
-	// check if user pressed escape
-	if(m_Input->IsKeyDown(VK_ESCAPE))
-	{
-		return false;
-	}
+	result = m_Input->Frame();
+	if(!result) return false;
 
-	// move this to separate class
-	
-
+	D3DXVECTOR3 movement = m_Input->GetMovement();
+	float rotationY = m_Input->GetYRotation();
+	float rotationX = m_Input->GetXRotation();
 	// do the graphics processing
-	result = m_Graphics->Frame();
+	result = m_Graphics->Frame(movement, rotationX,rotationY);
 	return result;	
 }
 
@@ -122,30 +129,7 @@ bool SystemClass::Frame()
 // system callback for message processing
 LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
-	switch(umsg)
-	{
-		// Check if a key has been pressed on the keyboard.
-		case WM_KEYDOWN:
-		{
-			// If a key is pressed send it to the input object so it can record that state.
-			m_Input->KeyDown((unsigned int)wparam);
-			return 0;
-		}
-
-		// Check if a key has been released on the keyboard.
-		case WM_KEYUP:
-		{
-			// If a key is released then send it to the input object so it can unset the state for that key.
-			m_Input->KeyUp((unsigned int)wparam);
-			return 0;
-		}
-
-		// Any other messages send to the default message handler as our application won't make use of them.
-		default:
-		{
-			return DefWindowProc(hwnd, umsg, wparam, lparam);
-		}
-	}
+	return DefWindowProc(hwnd, umsg, wparam, lparam);
 }
 
 void SystemClass::InitializeWindows(int& width, int& height)
@@ -203,8 +187,8 @@ void SystemClass::InitializeWindows(int& width, int& height)
 	else
 	{
 		// If windowed then set it to 800x600 resolution.
-		width  = 800;
-		height = 600;
+		width  = WINDOW_WIDTH;
+		height = WINDOW_HEIGHT;
 
 		// Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - width)  / 2;

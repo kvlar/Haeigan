@@ -132,17 +132,28 @@ void GraphicsClass::Shutdown()
 }
 
 static float rotation = 0.0f;
-bool GraphicsClass::Frame()
+bool GraphicsClass::Frame(D3DXVECTOR3 movement, float rotationX, float rotationY)
 {
 	bool result;
 	
-	rotation += (float)D3DX_PI * 0.01f;
-	if(rotation > 360.0f)
-	{
-		rotation = -360.0f;
-	}
+	D3DXVECTOR3 cam_position = m_Camera->GetPosition();
+	D3DXVECTOR3 cam_rotation = m_Camera->GetRotation();
+	cam_rotation.y += rotationY;
+	cam_rotation.x += rotationX;
+	
+
+	D3DXMATRIX view_matrix;
+	view_matrix = m_Camera->GetRotationMatrix();
+
+	D3DXVec3TransformCoord(&movement, &movement, &view_matrix);
+	cam_position += movement;
+
+
+	m_Camera->SetPosition(cam_position);
+	m_Camera->SetRotation(cam_rotation);
+
 	//render graphics scene
-	result = Render(rotation);
+	result = Render(0.0f);
 	if(!result)
 	{
 		return false;

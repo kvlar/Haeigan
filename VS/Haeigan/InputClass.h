@@ -14,8 +14,16 @@
 //-----
 // Includes
 //-----
-
+#include "D3dclass.h"
 #include <dinput.h>
+
+#include "HMath.h"
+
+//--------
+// consts
+//--------
+
+const float SPEED_FACTOR = 0.1f;
 
 class InputClass
 {
@@ -28,7 +36,11 @@ public:
 	void Shutdown();
 	bool Frame();
 	bool IsEscapePressed();
+	D3DXVECTOR3 GetMovement();
+	float GetYRotation();
+	float GetXRotation();
 	void GetMouseLocation(int&, int&);
+
 
 private:
 	bool ReadKeyboard();
