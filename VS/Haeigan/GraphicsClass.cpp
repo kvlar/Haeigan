@@ -4,11 +4,9 @@
 GraphicsClass::GraphicsClass()
 {
 	m_D3D = 0;
-	m_Camera = 0;
-	m_Model = 0;
 	m_baseShader = 0;
 	m_light = 0;
-
+	m_model_count = 1;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& ref)
@@ -50,14 +48,15 @@ bool GraphicsClass::Initialize(int& screen_width, int& screen_height, HWND hwnd)
 	m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
 	
 	// Create the model object.
-	m_Model = new ModelClass;
-	if(!m_Model)
+	for(int i = 0; i < m_model_count; i++)
 	{
-		return false;
+		ModelClass* m = new ModelClass;
+		m_Models.push_back(m);
+		result = m->Initialize(m_D3D->GetDevice(), "../Haeigan/data/cube.obj", L"../Haeigan/data/white_plastic.dds");
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_D3D->GetDevice(), "../Haeigan/data/cube.obj", L"../Haeigan/data/white_plastic.dds");
+	
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -87,7 +86,7 @@ bool GraphicsClass::Initialize(int& screen_width, int& screen_height, HWND hwnd)
 
 	// Initialize the light object.
 	m_light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_light->SetDirection(-1.0f, 0.0f, 1.0f);
+	m_light->SetDirection(-1.0f, 1.0f, 1.0f);
 
 	return true;
 }
@@ -109,12 +108,15 @@ void GraphicsClass::Shutdown()
 	}
 
 	// Release the model object.
-	if(m_Model)
+	while(!m_Models.empty())
 	{
-		m_Model->Shutdown();
-		delete m_Model;
-		m_Model = 0;
+		ModelClass* m = m_Models.back();
+		m_Models.pop_back();
+		m->Shutdown();
+		delete m;
+		m = 0;
 	}
+	
 
 	// Release the camera object.
 	if(m_Camera)
@@ -179,30 +181,22 @@ bool GraphicsClass::Render(float rotation)
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_D3D->GetWorldMatrix(worldMatrix);
 	m_D3D->GetProjectionMatrix(projectionMatrix);
+	D3DXMATRIX world_modification;
 
-	// rotate model
-	D3DXVECTOR3 rotation_vector(0.0f, 0.0f, 0.0f);
-	rotation_vector.y = rotation;
-	rotation_vector.z = rotation;
-	D3DXVECTOR3 test_vector(0.0f, 0.0f, 0.0f);
+	for(int i = 0; i < m_Models.size(); i++){
 
-	test_vector.z = 1.0f;
-	//m_Model->Translate(test_vector);
-	m_Model->Rotate(rotation_vector);
-	//D3DXMatrixRotationY(&worldMatrix, rotation);
+		world_modification = m_Models[i]->GetWorldTransformationMatrix();
 
-	D3DXMATRIX world_modification = m_Model->GetWorldTransformationMatrix();
+		m_Models[i]->Render(m_D3D->GetDeviceContext());
 
+		result = m_baseShader->Render(m_D3D->GetDeviceContext(), m_Models[i]->GetIndexCount(), \
+			worldMatrix * world_modification, viewMatrix, projectionMatrix, m_Models[i]->GetTexture(), m_light->GetDirection(),
+			m_light->GetDiffuseColor());
 
-	m_Model->Render(m_D3D->GetDeviceContext());
-
-	result = m_baseShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), \
-		worldMatrix * world_modification, viewMatrix, projectionMatrix, m_Model->GetTexture(), m_light->GetDirection(),
-		m_light->GetDiffuseColor());
-
-	if(!result)
-	{
-		return false;
+		if(!result)
+		{
+			return false;
+		}
 	}
 	m_D3D->EndScene();
 	return true;

@@ -8,6 +8,8 @@
 #include "BaseShaderClass.h"
 #include "LightClass.h"
 
+#include <vector>
+
 //----------
 // CONSTANTS
 //----------
@@ -36,7 +38,8 @@ private:
 	bool Render(float);
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
-	ModelClass* m_Model;
+	std::vector<ModelClass*> m_Models;
 	BaseShaderClass* m_baseShader;
 	LightClass* m_light;
+	int m_model_count;
 };
